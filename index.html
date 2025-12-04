@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waspito WhatsApp Bot - Healthcare at Your Fingertips</title>
+    <meta name="description"
+        content="Access doctors, order lab tests, get medications, and manage health insurance through WhatsApp. Available 24/7 in English and French.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Particle Canvas -->
+    <!-- <canvas id="particleCanvas"></canvas> -->
+    
+    <!-- Content Layer -->
+    <div class="content-layer">
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <img src="assets/logo.jpeg" alt="Waspito Logo" class="logo-img">
+            </div>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <i data-lucide="menu"></i>
+            </button>
+            <nav id="main-nav">
+                <a href="#features">
+                    <span class="lang-en">Services</span>
+                    <span class="lang-fr">Services</span>
+                </a>
+                <a href="#how-it-works">
+                    <span class="lang-en">How it Works</span>
+                    <span class="lang-fr">Comment ça marche</span>
+                </a>
+                <a href="#faq">
+                    <span class="lang-en">FAQ</span>
+                    <span class="lang-fr">FAQ</span>
+                </a>
+                <a href="#" class="lang-toggle" onclick="toggleLanguage(event)">FR</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1.1 Hero Section -->
+        <section class="hero">
+            <div class="container hero-grid">
+                <div class="hero-text">
+                    <h1>
+                        <span class="lang-en">Your Health, Just a Message Away</span>
+                        <span class="lang-fr">Votre Santé, à Portée de Message</span>
+                    </h1>
+                    <p class="subtitle">
+                        <span class="lang-en">Access doctors, order lab tests, get medications, and manage your health
+                            insurance - all through WhatsApp.</span>
+                        <span class="lang-fr">Consultez des médecins, commandez des tests de laboratoire, obtenez des
+                            médicaments et gérez votre assurance santé - tout via WhatsApp.</span>
+                    </p>
+                    <a href="https://wa.me/237682426078?text=Hi" class="btn-primary">
+                        <i data-lucide="message-circle"></i>
+                        <span class="lang-en">Chat</span>
+                        <span class="lang-fr">Discuter</span>
+                    </a>
+                </div>
+                <div class="hero-image">
+                    <img src="assets/wa_bot_interaction.jpg" alt="Waspito WhatsApp Bot Interface">
+                </div>
+            </div>
+        </section>
+
+        <!-- 1.2 Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>
+                        <span class="lang-en">Our Services</span>
+                        <span class="lang-fr">Nos Services</span>
+                    </h2>
+                    <p>
+                        <span class="lang-en">Everything you need for your health, in one chat.</span>
+                        <span class="lang-fr">Tout ce dont vous avez besoin pour votre santé, dans une seule
+                            discussion.</span>
+                    </p>
+                </div>
+                <div class="features-grid">
+                    <!-- Feature 1 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i data-lucide="stethoscope"></i>
+                        </div>
+                        <h3>
+                            <span class="lang-en">Talk to a Doctor</span>
+                            <span class="lang-fr">Parler à un Médecin</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Connect with qualified doctors across 20+ specialties. Get medical
+                                advice, prescriptions, and follow-ups.</span>
+                            <span class="lang-fr">Connectez-vous avec des médecins qualifiés dans plus de 20
+                                spécialités. Obtenez des conseils médicaux, des ordonnances et des suivis.</span>
+                        </p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i data-lucide="microscope"></i>
+                        </div>
+                        <h3>
+                            <span class="lang-en">Order Lab Tests</span>
+                            <span class="lang-fr">Commander des Tests</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Browse and order from 100+ lab tests. Get home sample collection and
+                                receive results directly on WhatsApp.</span>
+                            <span class="lang-fr">Parcourez et commandez parmi plus de 100 tests de laboratoire.
+                                Bénéficiez d'un prélèvement à domicile et recevez les résultats sur WhatsApp.</span>
+                        </p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i data-lucide="pill"></i>
+                        </div>
+                        <h3>
+                            <span class="lang-en">Get Medications</span>
+                            <span class="lang-fr">Obtenir des Médicaments</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Order prescription and over-the-counter medications. Fast delivery to
+                                your doorstep with verified pharmacies.</span>
+                            <span class="lang-fr">Commandez des médicaments sur ordonnance et en vente libre. Livraison
+                                rapide à votre porte avec des pharmacies vérifiées.</span>
+                        </p>
+                    </div>
+                    <!-- Feature 4 -->
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i data-lucide="shield-check"></i>
+                        </div>
+                        <h3>
+                            <span class="lang-en">Health Insurance</span>
+                            <span class="lang-fr">Assurance Santé</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Compare and purchase health insurance plans. Get instant quotes and
+                                coverage details tailored to your needs.</span>
+                            <span class="lang-fr">Comparez et achetez des plans d'assurance santé. Obtenez des devis
+                                instantanés et des détails de couverture adaptés à vos besoins.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1.3 How It Works -->
+        <section id="how-it-works" class="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2>
+                        <span class="lang-en">How It Works</span>
+                        <span class="lang-fr">Comment ça marche</span>
+                    </h2>
+                    <p>
+                        <span class="lang-en">Simple, fast, and secure.</span>
+                        <span class="lang-fr">Simple, rapide et sécurisé.</span>
+                    </p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-icon"><i data-lucide="message-square"></i></div>
+                        <h3>
+                            <span class="lang-en">Send a Message</span>
+                            <span class="lang-fr">Envoyez un Message</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Click the button or scan the QR code to start chatting.</span>
+                            <span class="lang-fr">Cliquez sur le bouton ou scannez le code QR pour commencer à
+                                discuter.</span>
+                        </p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-icon"><i data-lucide="list"></i></div>
+                        <h3>
+                            <span class="lang-en">Choose Service</span>
+                            <span class="lang-fr">Choisissez le Service</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Type 'doctor', 'lab', or select from the menu.</span>
+                            <span class="lang-fr">Tapez 'docteur', 'labo' ou choisissez dans le menu.</span>
+                        </p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-icon"><i data-lucide="check-circle-2"></i></div>
+                        <h3>
+                            <span class="lang-en">Get Help</span>
+                            <span class="lang-fr">Obtenez de l'Aide</span>
+                        </h3>
+                        <p>
+                            <span class="lang-en">Follow the prompts to complete your request instantly.</span>
+                            <span class="lang-fr">Suivez les instructions pour compléter votre demande
+                                instantanément.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1.4 Keywords Reference -->
+        <section class="keywords-section">
+            <div class="container">
+                <h2>
+                    <span class="lang-en">Quick Commands</span>
+                    <span class="lang-fr">Commandes Rapides</span>
+                </h2>
+                <div class="table-responsive">
+                    <table class="keywords-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="lang-en">Service</span>
+                                    <span class="lang-fr">Service</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">English Keywords</span>
+                                    <span class="lang-fr">Mots-clés Anglais</span>
+                                </th>
+                                <th>
+                                    <span class="lang-en">French Keywords</span>
+                                    <span class="lang-fr">Mots-clés Français</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag doctor">Doctor</span></td>
+                                <td>doctor, consult, medical</td>
+                                <td>docteur, consulter, médecin</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag lab">Laboratory</span></td>
+                                <td>lab, test, laboratory</td>
+                                <td>labo, laboratoire, test</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag pharmacy">Pharmacy</span></td>
+                                <td>pharmacy, medicine, drug</td>
+                                <td>pharmacie, médicament</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag insurance">Insurance</span></td>
+                                <td>insurance, policy</td>
+                                <td>assurance, police</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="note">
+                    <span class="lang-en">Type any of these keywords anytime to jump to that service.</span>
+                    <span class="lang-fr">Tapez n'importe lequel de ces mots-clés à tout moment pour accéder à ce
+                        service.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- 1.5 Benefits -->
+        <section class="benefits">
+            <div class="container">
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <i data-lucide="clock"></i>
+                        <div>
+                            <h4>
+                                <span class="lang-en">24/7 Availability</span>
+                                <span class="lang-fr">Disponibilité 24/7</span>
+                            </h4>
+                            <p>
+                                <span class="lang-en">Get help anytime, day or night.</span>
+                                <span class="lang-fr">Obtenez de l'aide à tout moment, jour et nuit.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i data-lucide="download-cloud"></i>
+                        <div>
+                            <h4>
+                                <span class="lang-en">No App Download</span>
+                                <span class="lang-fr">Pas de Téléchargement</span>
+                            </h4>
+                            <p>
+                                <span class="lang-en">Use WhatsApp - no new app needed.</span>
+                                <span class="lang-fr">Utilisez WhatsApp - aucune nouvelle application nécessaire.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i data-lucide="languages"></i>
+                        <div>
+                            <h4>
+                                <span class="lang-en">Bilingual Support</span>
+                                <span class="lang-fr">Support Bilingue</span>
+                            </h4>
+                            <p>
+                                <span class="lang-en">Chat in English or French.</span>
+                                <span class="lang-fr">Discutez en anglais ou en français.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <i data-lucide="lock"></i>
+                        <div>
+                            <h4>
+                                <span class="lang-en">Secure & Private</span>
+                                <span class="lang-fr">Sécurisé et Privé</span>
+                            </h4>
+                            <p>
+                                <span class="lang-en">Your health data is encrypted.</span>
+                                <span class="lang-fr">Vos données de santé sont cryptées.</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1.7 FAQ -->
+        <section id="faq" class="faq">
+            <div class="container">
+                <h2>
+                    <span class="lang-en">Frequently Asked Questions</span>
+                    <span class="lang-fr">Questions Fréquemment Posées</span>
+                </h2>
+                <div class="faq-list">
+                    <details>
+                        <summary>
+                            <span class="lang-en">Is this service free?</span>
+                            <span class="lang-fr">Ce service est-il gratuit ?</span>
+                        </summary>
+                        <p>
+                            <span class="lang-en">The WhatsApp bot is free to use. You only pay for the services you
+                                order (consultations, tests, medications, insurance).</span>
+                            <span class="lang-fr">Le bot WhatsApp est gratuit. Vous ne payez que pour les services que
+                                vous commandez (consultations, tests, médicaments, assurance).</span>
+                        </p>
+                    </details>
+                    <details>
+                        <summary>
+                            <span class="lang-en">What languages are supported?</span>
+                            <span class="lang-fr">Quelles langues sont prises en charge ?</span>
+                        </summary>
+                        <p>
+                            <span class="lang-en">Currently English and French. You can switch languages anytime by
+                                typing 'en' or 'fr'.</span>
+                            <span class="lang-fr">Actuellement anglais et français. Vous pouvez changer de langue à tout
+                                moment en tapant 'en' ou 'fr'.</span>
+                        </p>
+                    </details>
+                    <details>
+                        <summary>
+                            <span class="lang-en">Is my data secure?</span>
+                            <span class="lang-fr">Mes données sont-elles sécurisées ?</span>
+                        </summary>
+                        <p>
+                            <span class="lang-en">Yes. All conversations are encrypted end-to-end through WhatsApp, and
+                                we follow strict healthcare data protection standards.</span>
+                            <span class="lang-fr">Oui. Toutes les conversations sont cryptées de bout en bout via
+                                WhatsApp, et nous suivons des normes strictes de protection des données de santé.</span>
+                        </p>
+                    </details>
+                    <details>
+                        <summary>
+                            <span class="lang-en">Do I need to create an account?</span>
+                            <span class="lang-fr">Dois-je créer un compte ?</span>
+                        </summary>
+                        <p>
+                            <span class="lang-en">No account needed! Just start chatting. Your WhatsApp number is your
+                                identifier.</span>
+                            <span class="lang-fr">Aucun compte nécessaire ! Commencez simplement à discuter. Votre
+                                numéro WhatsApp est votre identifiant.</span>
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 1.8 CTA Section -->
+        <section class="cta-section">
+            <div class="container cta-content">
+                <div class="cta-text">
+                    <h2>
+                        <span class="lang-en">Ready to Get Started?</span>
+                        <span class="lang-fr">Prêt à Commencer ?</span>
+                    </h2>
+                    <p>
+                        <span class="lang-en">Join thousands using Waspito's WhatsApp Bot for their healthcare
+                            needs.</span>
+                        <span class="lang-fr">Rejoignez des milliers de personnes utilisant le bot WhatsApp de Waspito
+                            pour leurs besoins de santé.</span>
+                    </p>
+                    <a href="https://wa.me/237682426078?text=Hi" class="btn-primary btn-large">
+                        <i data-lucide="message-circle"></i>
+                        <span class="lang-en">Chat</span>
+                        <span class="lang-fr">Discuter</span>
+                    </a>
+                </div>
+                <div class="cta-qr">
+                    <img src="assets/qr-code.png" alt="Scan to Chat">
+                    <p>
+                        <span class="lang-en">Scan to Chat</span>
+                        <span class="lang-fr">Scanner pour Discuter</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-col">
+                <div class="logo">Waspito</div>
+                <p>
+                    <span class="lang-en">Healthcare made simple.</span>
+                    <span class="lang-fr">La santé simplifiée.</span>
+                </p>
+            </div>
+            <!-- <div class="footer-col">
+                <h4>Links</h4>
+                <a href="#">
+                    <span class="lang-en">About</span>
+                    <span class="lang-fr">À propos</span>
+                </a>
+                <a href="#">
+                    <span class="lang-en">Privacy Policy</span>
+                    <span class="lang-fr">Politique de Confidentialité</span>
+                </a>
+                <a href="#">
+                    <span class="lang-en">Terms</span>
+                    <span class="lang-fr">Conditions</span>
+                </a>
+            </div>-->
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <a href="#">Twitter</a>
+                <a href="#">Facebook</a>
+                <a href="#">LinkedIn</a>
+            </div> 
+        </div>
+        <div class="container copyright">
+            <p>&copy; 2025 Waspito. All rights reserved.</p>
+        </div>
+    </footer>
+    </div>
+    <!-- End Content Layer -->
+
+    <!-- SVG Filter for Liquid Glass Distortion -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <defs>
+            <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
+                <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                <feDisplacementMap in="SourceGraphic" in2="blurred" scale="77" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        // Scroll to top on page load/refresh and remove hash
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+        
+        // Remove hash from URL and scroll to top
+        if (window.location.hash) {
+            history.replaceState(null, null, window.location.pathname);
+        }
+        window.scrollTo(0, 0);
+
+        lucide.createIcons();
+
+        // Initialize in English mode
+        document.documentElement.lang = 'en';
+
+        function toggleLanguage(event) {
+            event.preventDefault();
+            const body = document.body;
+            const toggleBtn = document.querySelector('.lang-toggle');
+
+            body.classList.toggle('fr-mode');
+
+            if (body.classList.contains('fr-mode')) {
+                toggleBtn.textContent = 'EN';
+                document.documentElement.lang = 'fr';
+            } else {
+                toggleBtn.textContent = 'FR';
+                document.documentElement.lang = 'en';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('main-nav');
+            nav.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('main-nav').classList.remove('active');
+            });
+        });
+
+        // Typing effect for hero headline
+        function typeWriter(element, text, speed = 10) {
+            let i = 0;
+            element.textContent = '';
+            element.classList.add('typing');
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    element.classList.remove('typing');
+                    element.classList.add('typing-complete');
+                }
+            }
+            type();
+        }
+
+        // Initialize typing effect on page load
+        window.addEventListener('load', () => {
+            const isFrenchMode = document.body.classList.contains('fr-mode');
+            const heroTitle = document.querySelector('.hero-text h1');
+            const activeSpan = isFrenchMode ? 
+                heroTitle.querySelector('.lang-fr') : 
+                heroTitle.querySelector('.lang-en');
+            
+            if (activeSpan) {
+                const text = activeSpan.textContent;
+                setTimeout(() => typeWriter(activeSpan, text, 50), 500);
+            }
+        });
+
+        // Parallax scrolling effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            // Parallax for hero background shapes
+            const heroSection = document.querySelector('.hero');
+            if (heroSection) {
+                heroSection.style.setProperty('--scroll', scrolled * 0.5 + 'px');
+            }
+
+            // Parallax for decorative elements
+            const features = document.querySelector('.features::before');
+            const howItWorks = document.querySelector('.how-it-works::after');
+        });
+
+        // Apply parallax transform via CSS custom property
+        document.documentElement.style.setProperty('--scroll', '0px');
+
+        // Scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Observe feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Observe steps
+            document.querySelectorAll('.step').forEach(step => {
+                observer.observe(step);
+            });
+
+            // Observe benefit items
+            document.querySelectorAll('.benefit-item').forEach(item => {
+                observer.observe(item);
+            });
+
+            // Observe section headers
+            document.querySelectorAll('.section-header').forEach(header => {
+                observer.observe(header);
+            });
+        });
+
+        // Particle System
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        
+        let mouseX = width / 2;
+        let mouseY = height / 2;
+        let targetX = width / 2;
+        let targetY = height / 2;
+        
+        const isMobile = window.innerWidth < 768;
+        
+        class Particle {
+            constructor(index, total, ring, particlesInRing, positionInRing) {
+                this.ring = ring;
+                this.ringSpacing = 35;
+                this.radius = (ring + 1) * this.ringSpacing;
+                this.angleStep = (Math.PI * 2) / particlesInRing;
+                this.angle = positionInRing * this.angleStep;
+                
+                this.centerX = mouseX;
+                this.centerY = mouseY;
+                
+                this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
+                this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
+                
+                this.x = this.baseX;
+                this.y = this.baseY;
+                this.vx = 0;
+                this.vy = 0;
+                
+                this.minSize = 2;
+                this.maxSize = 8;
+                this.size = this.minSize + Math.random() * (this.maxSize - this.minSize);
+                this.sizePhase = Math.random() * Math.PI * 6;
+                this.sizeSpeed = 0.02 + Math.random() * 0.02;
+                
+                this.wavePhase = Math.random() * Math.PI * 2;
+                this.waveSpeed = 0.01 + Math.random() * 0.01;
+                this.waveAmplitudeX = 30 + Math.random() * 50;
+                this.waveAmplitudeY = 30 + Math.random() * 50;
+                
+                this.depth = 0.7 + Math.random() * 0.3;
+                
+                this.hue = 140;
+                this.saturation = 80;
+                this.lightness = 42 + Math.random() * 8;
+            }
+            
+            update(time) {
+                this.sizePhase += this.sizeSpeed;
+                const sizeOscillation = Math.sin(this.sizePhase);
+                this.size = this.minSize + ((sizeOscillation + 1) / 2) * (this.maxSize - this.minSize) * this.depth;
+                
+                const dx = mouseX - this.centerX;
+                const dy = mouseY - this.centerY;
+                
+                const particleAngleFromCenter = Math.atan2(this.baseY - this.centerY, this.baseX - this.centerX);
+                const mouseAngleFromCenter = Math.atan2(dy, dx);
+                
+                let angleDiff = mouseAngleFromCenter - particleAngleFromCenter;
+                while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+                while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+                
+                const alignmentFactor = Math.cos(angleDiff);
+                const followSpeed = 0.05 + (alignmentFactor * 0.03);
+                
+                this.centerX += (mouseX - this.centerX) * followSpeed;
+                this.centerY += (mouseY - this.centerY) * followSpeed;
+                
+                this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
+                this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
+                
+                this.wavePhase += this.waveSpeed;
+                const waveX = Math.sin(this.wavePhase) * this.waveAmplitudeX * this.depth * 0.3;
+                const waveY = Math.cos(this.wavePhase * 0.8) * this.waveAmplitudeY * this.depth * 0.3;
+                
+                const targetX = this.baseX + waveX;
+                const targetY = this.baseY + waveY;
+                
+                this.x += (targetX - this.x) * 0.15;
+                this.y += (targetY - this.y) * 0.15;
+                
+                this.vx = (targetX - this.x) * 0.5;
+                this.vy = (targetY - this.y) * 0.5;
+            }
+            
+            draw() {
+                const opacity = (this.size - this.minSize) / (this.maxSize - this.minSize) * 0.85;
+                
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                const stretchFactor = Math.min(speed * 0.05, 0.3);
+                const radiusX = this.size * (1 + stretchFactor);
+                const radiusY = this.size * (1 - stretchFactor * 0.5);
+                
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                if (speed > 0.1) {
+                    const angle = Math.atan2(this.vy, this.vx);
+                    ctx.rotate(angle);
+                }
+                
+                const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radiusX);
+                gradient.addColorStop(0, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 10}%, ${opacity})`);
+                gradient.addColorStop(0.7, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 5}%, ${opacity * 0.6})`);
+                gradient.addColorStop(1, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0)`);
+                
+                ctx.beginPath();
+                ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+        
+        const particles = [];
+        const numRings = isMobile ? 3 : 6;
+        const particlesPerRing = isMobile ? 8 : 20;
+        
+        for (let ring = 0; ring < numRings; ring++) {
+            for (let i = 0; i < particlesPerRing; i++) {
+                particles.push(new Particle(particles.length, particlesPerRing * numRings, ring, particlesPerRing, i));
+            }
+        }
+        
+        if (!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                targetX = e.clientX;
+                targetY = e.clientY;
+            });
+        } else {
+            document.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                targetX = touch.clientX;
+                targetY = touch.clientY;
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                targetX = touch.clientX;
+                targetY = touch.clientY;
+            }, { passive: false });
+        }
+        
+        let time = 0;
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            
+            time += 0.016;
+            
+            mouseX += (targetX - mouseX) * 0.1;
+            mouseY += (targetY - mouseY) * 0.1;
+            
+            particles.forEach(particle => {
+                particle.update(time);
+                particle.draw();
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+        
+        animateParticles();
+    </script>
+</body>
+
+</html>
