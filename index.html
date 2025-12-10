@@ -94,8 +94,68 @@
         position: fixed;
         transition: transform 0.1s ease-out;
         will-change: transform;
-        pointer-events: none;
+        pointer-events: auto;
         z-index: 5;
+        cursor: pointer;
+      }
+
+      .hovering-bot:hover {
+        opacity: 0.9;
+      }
+
+      .bot-popup {
+        position: fixed;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 12px 18px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        z-index: 20;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+        white-space: nowrap;
+        max-width: 250px;
+      }
+
+      .bot-popup.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .bot-popup::before {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 8px solid rgba(255, 255, 255, 0.95);
+      }
+
+      /* Rainfall effect on header */
+      #rainfallCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      header {
+        position: relative;
+        overflow: hidden;
       }
     </style>
   </head>
@@ -107,7 +167,8 @@
     <div class="content-layer min-h-screen flex flex-col">
       <!-- Header -->
       <header class="p-4 md:p-6">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <canvas id="rainfallCanvas"></canvas>
+        <div class="max-w-7xl mx-auto flex justify-between items-center relative z-10">
           <div class="flex items-center space-x-2">
             <img src="logo.jpeg" alt="Logo" class="w-10 h-10 rounded" />
             <span class="text-lg md:text-xl font-semibold text-gray-800"
@@ -153,6 +214,9 @@
             alt="Waspito Bot"
             class="w-12 h-12 md:w-16 md:h-16 hovering-bot"
           />
+
+          <!-- Bot popup message -->
+          <div class="bot-popup" id="botPopup">Hi, I will follow you</div>
 
           <h1
             class="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 md:mb-6"
@@ -404,11 +468,103 @@
         }
       }
 
-      // Mouse/Touch tracking
+      // Get bot element and popup
+      const botElement = document.querySelector(".hovering-bot");
+      const botPopup = document.getElementById("botPopup");
+      let popupTimeout = null;
+
+      // Track if bot is in follow mode (clicked)
+      let isFollowing = false;
+
+      // Function to show popup near bot
+      function showBotPopup() {
+        if (!botPopup || !botElement) return;
+
+        // Clear any existing timeout
+        if (popupTimeout) {
+          clearTimeout(popupTimeout);
+        }
+
+        // Get bot position
+        const botRect = botElement.getBoundingClientRect();
+        const botX = botRect.left + botRect.width / 2;
+        const botY = botRect.top;
+
+        // Position popup above the bot
+        botPopup.style.left = `${botX}px`;
+        botPopup.style.top = `${botY - 60}px`;
+        botPopup.style.transform = "translateX(-50%)";
+
+        // Show popup
+        botPopup.classList.add("show");
+
+        // Hide popup after 3 seconds
+        popupTimeout = setTimeout(() => {
+          botPopup.classList.remove("show");
+        }, 3000);
+      }
+
+      // Store bot's position when not following
+      let botFixedX = width / 2;
+      let botFixedY = height / 2;
+
+      // Track particle center position (same as mouse position after smoothing)
+      let particleCenterX = width / 2;
+      let particleCenterY = height / 2;
+
+      // Initialize bot at center of viewport
+      if (botElement) {
+        botElement.style.left = `${width / 2}px`;
+        botElement.style.top = `${height / 2}px`;
+        botElement.style.transform = "translate(-50%, -50%)";
+        botFixedX = width / 2;
+        botFixedY = height / 2;
+      }
+
+      // Toggle follow mode when bot is clicked
+      if (botElement) {
+        botElement.addEventListener("click", (e) => {
+          e.stopPropagation();
+          isFollowing = !isFollowing;
+
+          if (isFollowing) {
+            // Show popup message
+            showBotPopup();
+
+            // Start following - set target to current mouse position
+            targetX =
+              e.clientX ||
+              (e.touches && e.touches[0] ? e.touches[0].clientX : width / 2);
+            targetY =
+              e.clientY ||
+              (e.touches && e.touches[0] ? e.touches[0].clientY : height / 2);
+            mouseX = targetX;
+            mouseY = targetY;
+          } else {
+            // Stop following - save current position
+            const rect = botElement.getBoundingClientRect();
+            botFixedX = rect.left + rect.width / 2;
+            botFixedY = rect.top + rect.height / 2;
+          }
+        });
+      }
+
+      // Mouse/Touch tracking - particles always follow, bot only when clicked
       if (!isMobile) {
         document.addEventListener("mousemove", (e) => {
+          // Particles always follow mouse
           targetX = e.clientX;
           targetY = e.clientY;
+        });
+
+        // Click outside to stop following
+        document.addEventListener("click", (e) => {
+          if (isFollowing && botElement && !botElement.contains(e.target)) {
+            isFollowing = false;
+            const rect = botElement.getBoundingClientRect();
+            botFixedX = rect.left + rect.width / 2;
+            botFixedY = rect.top + rect.height / 2;
+          }
         });
       } else {
         document.addEventListener("touchstart", (e) => {
@@ -420,27 +576,17 @@
         document.addEventListener(
           "touchmove",
           (e) => {
-            e.preventDefault();
+            // Only prevent default when bot is following to track movement
+            // Otherwise allow normal scrolling
+            if (isFollowing) {
+              e.preventDefault();
+            }
             const touch = e.touches[0];
             targetX = touch.clientX;
             targetY = touch.clientY;
           },
           { passive: false }
         );
-      }
-
-      // Get bot element
-      const botElement = document.querySelector(".hovering-bot");
-
-      // Track particle center position (same as mouse position after smoothing)
-      let particleCenterX = width / 2;
-      let particleCenterY = height / 2;
-
-      // Initialize bot at center of viewport
-      if (botElement) {
-        botElement.style.left = `${width / 2}px`;
-        botElement.style.top = `${height / 2}px`;
-        botElement.style.transform = "translate(-50%, -50%)";
       }
 
       // Animation loop
@@ -464,15 +610,30 @@
           particle.draw();
         });
 
-        // Update bot position to be exactly at particle center
+        // Update bot position - only when in follow mode
         if (botElement) {
-          // Position bot directly at particle center coordinates
-          // Using translate(-50%, -50%) to center the bot on the point
           const floatY = Math.sin(time * 2) * 5;
 
-          botElement.style.left = `${particleCenterX}px`;
-          botElement.style.top = `${particleCenterY + floatY}px`;
-          botElement.style.transform = "translate(-50%, -50%)";
+          if (isFollowing) {
+            // Position bot directly at particle center coordinates
+            botElement.style.left = `${particleCenterX}px`;
+            botElement.style.top = `${particleCenterY + floatY}px`;
+            botElement.style.transform = "translate(-50%, -50%)";
+
+            // Update popup position to follow bot
+            if (botPopup && botPopup.classList.contains("show")) {
+              const botRect = botElement.getBoundingClientRect();
+              const botX = botRect.left + botRect.width / 2;
+              const botY = botRect.top;
+              botPopup.style.left = `${botX}px`;
+              botPopup.style.top = `${botY - 60}px`;
+            }
+          } else {
+            // Keep bot at fixed position with floating animation
+            botElement.style.left = `${botFixedX}px`;
+            botElement.style.top = `${botFixedY + floatY}px`;
+            botElement.style.transform = "translate(-50%, -50%)";
+          }
         }
 
         requestAnimationFrame(animate);
@@ -484,8 +645,14 @@
         height = canvas.height = window.innerHeight;
         // Update bot position if it exists
         if (botElement) {
-          botElement.style.left = `${particleCenterX}px`;
-          botElement.style.top = `${particleCenterY}px`;
+          if (isFollowing) {
+            botElement.style.left = `${particleCenterX}px`;
+            botElement.style.top = `${particleCenterY}px`;
+          } else {
+            // Adjust fixed position proportionally or keep relative
+            botElement.style.left = `${botFixedX}px`;
+            botElement.style.top = `${botFixedY}px`;
+          }
         }
       });
 
