@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Hero Section with Particle Effect</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,6 +19,14 @@
         margin: 0;
         overflow-x: hidden;
         font-family: "Montserrat", sans-serif;
+        /* Support for mobile browsers with dynamic viewport */
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+      }
+
+      html {
+        /* Support for mobile browsers with dynamic viewport */
+        height: -webkit-fill-available;
       }
 
       #particleCanvas {
@@ -24,6 +35,8 @@
         left: 0;
         width: 100%;
         height: 100%;
+        height: 100vh;
+        height: -webkit-fill-available;
         z-index: 1;
         pointer-events: none;
       }
@@ -109,7 +122,7 @@
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         border-radius: 12px;
-        padding: 12px 18px;
+        padding: 10px 14px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         z-index: 20;
         pointer-events: none;
@@ -117,11 +130,20 @@
         transform: translateY(10px) scale(0.9);
         transition: opacity 0.3s ease, transform 0.3s ease;
         font-family: "Montserrat", sans-serif;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
         color: #1f2937;
         white-space: nowrap;
-        max-width: 250px;
+        max-width: 200px;
+        word-wrap: break-word;
+      }
+
+      @media (min-width: 640px) {
+        .bot-popup {
+          font-size: 14px;
+          padding: 12px 18px;
+          max-width: 250px;
+        }
       }
 
       .bot-popup.show {
@@ -156,6 +178,16 @@
       header {
         position: relative;
         overflow: hidden;
+        /* Safe area insets for notched devices */
+        padding-top: env(safe-area-inset-top);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+
+      @media (max-width: 640px) {
+        header {
+          padding-top: max(1rem, env(safe-area-inset-top));
+        }
       }
     </style>
   </head>
@@ -168,7 +200,9 @@
       <!-- Header -->
       <header class="p-4 md:p-6">
         <canvas id="rainfallCanvas"></canvas>
-        <div class="max-w-7xl mx-auto flex justify-between items-center relative z-10">
+        <div
+          class="max-w-7xl mx-auto flex justify-between items-center relative z-10"
+        >
           <div class="flex items-center space-x-2">
             <img src="logo.jpeg" alt="Logo" class="w-10 h-10 rounded" />
             <span class="text-lg md:text-xl font-semibold text-gray-800"
@@ -281,15 +315,31 @@
       const canvas = document.getElementById("particleCanvas");
       const ctx = canvas.getContext("2d");
 
+      // Get proper viewport height for mobile browsers
+      function getViewportHeight() {
+        return Math.max(
+          window.innerHeight || 0,
+          document.documentElement.clientHeight || 0
+        );
+      }
+
       let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
+      let height = (canvas.height = getViewportHeight());
 
       let mouseX = width / 2;
       let mouseY = height / 2;
       let targetX = width / 2;
       let targetY = height / 2;
 
-      const isMobile = window.innerWidth < 768;
+      // Function to check if mobile (updates on resize)
+      function checkIsMobile() {
+        return (
+          window.innerWidth < 768 ||
+          window.matchMedia("(pointer: coarse)").matches
+        );
+      }
+
+      let isMobile = checkIsMobile();
       const particleCount = isMobile ? 30 : 60;
 
       class Particle {
@@ -451,8 +501,8 @@
 
       // Create particles in concentric rings
       const particles = [];
-      const numRings = isMobile ? 3 : 6;
-      const particlesPerRing = isMobile ? 8 : 20;
+      let numRings = isMobile ? 3 : 6;
+      let particlesPerRing = isMobile ? 8 : 20;
 
       for (let ring = 0; ring < numRings; ring++) {
         for (let i = 0; i < particlesPerRing; i++) {
@@ -490,9 +540,41 @@
         const botX = botRect.left + botRect.width / 2;
         const botY = botRect.top;
 
-        // Position popup above the bot
-        botPopup.style.left = `${botX}px`;
-        botPopup.style.top = `${botY - 60}px`;
+        // Calculate popup position with safe margins
+        const popupHeight = 50; // Approximate popup height
+        const margin = 10;
+        const spaceAbove = botY;
+        const spaceBelow = window.innerHeight - botY;
+
+        // Position popup above or below based on available space
+        let popupTop;
+        if (spaceAbove > popupHeight + margin) {
+          // Position above
+          popupTop = botY - popupHeight - margin;
+        } else if (spaceBelow > popupHeight + margin) {
+          // Position below
+          popupTop = botY + botRect.height + margin;
+        } else {
+          // Center vertically if not enough space
+          popupTop = Math.max(
+            margin,
+            Math.min(
+              window.innerHeight - popupHeight - margin,
+              botY - popupHeight / 2
+            )
+          );
+        }
+
+        // Ensure popup stays within viewport horizontally
+        const popupWidth = 200; // Approximate width
+        const leftPosition = Math.max(
+          popupWidth / 2 + margin,
+          Math.min(window.innerWidth - popupWidth / 2 - margin, botX)
+        );
+
+        // Position popup
+        botPopup.style.left = `${leftPosition}px`;
+        botPopup.style.top = `${popupTop}px`;
         botPopup.style.transform = "translateX(-50%)";
 
         // Show popup
@@ -514,11 +596,13 @@
 
       // Initialize bot at center of viewport
       if (botElement) {
-        botElement.style.left = `${width / 2}px`;
-        botElement.style.top = `${height / 2}px`;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        botElement.style.left = `${centerX}px`;
+        botElement.style.top = `${centerY}px`;
         botElement.style.transform = "translate(-50%, -50%)";
-        botFixedX = width / 2;
-        botFixedY = height / 2;
+        botFixedX = centerX;
+        botFixedY = centerY;
       }
 
       // Toggle follow mode when bot is clicked
@@ -567,26 +651,59 @@
           }
         });
       } else {
+        let touchStartY = 0;
+        let touchStartX = 0;
+        let isDragging = false;
+        const DRAG_THRESHOLD = 10; // pixels
+
         document.addEventListener("touchstart", (e) => {
           const touch = e.touches[0];
           targetX = touch.clientX;
           targetY = touch.clientY;
+          touchStartY = touch.clientY;
+          touchStartX = touch.clientX;
+          isDragging = false;
+
+          // Check if touching the bot
+          if (
+            botElement &&
+            (botElement.contains(e.target) || e.target === botElement)
+          ) {
+            isDragging = true;
+          }
         });
 
         document.addEventListener(
           "touchmove",
           (e) => {
-            // Only prevent default when bot is following to track movement
-            // Otherwise allow normal scrolling
-            if (isFollowing) {
-              e.preventDefault();
-            }
             const touch = e.touches[0];
-            targetX = touch.clientX;
-            targetY = touch.clientY;
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+            const deltaX = Math.abs(touch.clientX - touchStartX);
+
+            // Only prevent scrolling if:
+            // 1. Bot is following
+            // 2. User is dragging (not scrolling)
+            // 3. Movement is primarily horizontal or very small (indicating drag, not scroll)
+            if (
+              isFollowing &&
+              isDragging &&
+              (deltaX > deltaY || deltaY < DRAG_THRESHOLD)
+            ) {
+              e.preventDefault();
+              targetX = touch.clientX;
+              targetY = touch.clientY;
+            } else {
+              // Allow normal scrolling
+              targetX = touch.clientX;
+              targetY = touch.clientY;
+            }
           },
           { passive: false }
         );
+
+        document.addEventListener("touchend", () => {
+          isDragging = false;
+        });
       }
 
       // Animation loop
@@ -625,8 +742,36 @@
               const botRect = botElement.getBoundingClientRect();
               const botX = botRect.left + botRect.width / 2;
               const botY = botRect.top;
-              botPopup.style.left = `${botX}px`;
-              botPopup.style.top = `${botY - 60}px`;
+
+              // Calculate safe position
+              const popupHeight = 50;
+              const margin = 10;
+              const spaceAbove = botY;
+              const spaceBelow = window.innerHeight - botY;
+
+              let popupTop;
+              if (spaceAbove > popupHeight + margin) {
+                popupTop = botY - popupHeight - margin;
+              } else if (spaceBelow > popupHeight + margin) {
+                popupTop = botY + botRect.height + margin;
+              } else {
+                popupTop = Math.max(
+                  margin,
+                  Math.min(
+                    window.innerHeight - popupHeight - margin,
+                    botY - popupHeight / 2
+                  )
+                );
+              }
+
+              const popupWidth = 200;
+              const leftPosition = Math.max(
+                popupWidth / 2 + margin,
+                Math.min(window.innerWidth - popupWidth / 2 - margin, botX)
+              );
+
+              botPopup.style.left = `${leftPosition}px`;
+              botPopup.style.top = `${popupTop}px`;
             }
           } else {
             // Keep bot at fixed position with floating animation
@@ -639,10 +784,15 @@
         requestAnimationFrame(animate);
       }
 
-      // Handle window resize
-      window.addEventListener("resize", () => {
+      // Handle window resize and orientation change
+      function handleResize() {
         width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
+        height = canvas.height = getViewportHeight();
+
+        // Update mobile detection
+        const wasMobile = isMobile;
+        isMobile = checkIsMobile();
+
         // Update bot position if it exists
         if (botElement) {
           if (isFollowing) {
@@ -654,6 +804,17 @@
             botElement.style.top = `${botFixedY}px`;
           }
         }
+
+        // Update popup position if visible
+        if (botPopup && botPopup.classList.contains("show")) {
+          showBotPopup();
+        }
+      }
+
+      window.addEventListener("resize", handleResize);
+      window.addEventListener("orientationchange", () => {
+        // Delay to allow orientation change to complete
+        setTimeout(handleResize, 100);
       });
 
       // Start animation
