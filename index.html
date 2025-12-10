@@ -1,377 +1,496 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hero Section with Particle Effect</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            margin: 0;
-            overflow-x: hidden;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        #particleCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-        
-        .content-layer {
-            position: relative;
-            z-index: 10;
-        }
-        
-        .liquid-glass {
-            position: relative;
-            isolation: isolate;
-            box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            background: none;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        .liquid-glass:focus {
-            outline: none;
-        }
-        
-        .liquid-glass::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            border-radius: inherit;
-            box-shadow: inset 0 0 7px -5px #000000;
-            background-color: rgba(255, 255, 255, 0);
-        }
-        
-        .liquid-glass::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            border-radius: inherit;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            filter: url(#glass-distortion);
-            -webkit-filter: url(#glass-distortion);
-        }
-        
-        .glass-text {
-            position: relative;
-            color: #1f2937;
-            font-size: inherit;
-            font-weight: inherit;
-            text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            opacity: 1;
-        }
-        
-        .liquid-glass:hover {
-            transform: translateY(-2px);
-            /* box-shadow: 0px 8px 28px rgba(0, 0, 0, 0.25); */
-        }
-        
-        .liquid-glass:active {
-            transform: scale(0.98);
-        }
-        
-        .hovering-bot {
-            animation: hover-float 3s ease-in-out infinite;
-        }
-        
-        @keyframes hover-float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
+      body {
+        margin: 0;
+        overflow-x: hidden;
+        font-family: "Montserrat", sans-serif;
+      }
+
+      #particleCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .content-layer {
+        position: relative;
+        z-index: 10;
+      }
+
+      .liquid-glass {
+        position: relative;
+        isolation: isolate;
+        box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: none;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .liquid-glass:focus {
+        outline: none;
+      }
+
+      .liquid-glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        border-radius: inherit;
+        box-shadow: inset 0 0 7px -5px #000000;
+        background-color: rgba(255, 255, 255, 0);
+      }
+
+      .liquid-glass::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        filter: url(#glass-distortion);
+        -webkit-filter: url(#glass-distortion);
+      }
+
+      .glass-text {
+        position: relative;
+        color: #1f2937;
+        font-size: inherit;
+        font-weight: inherit;
+        text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        opacity: 1;
+      }
+
+      .liquid-glass:hover {
+        transform: translateY(-2px);
+        /* box-shadow: 0px 8px 28px rgba(0, 0, 0, 0.25); */
+      }
+
+      .liquid-glass:active {
+        transform: scale(0.98);
+      }
+
+      .hovering-bot {
+        position: fixed;
+        transition: transform 0.1s ease-out;
+        will-change: transform;
+        pointer-events: none;
+        z-index: 5;
+      }
     </style>
-</head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100">
+  </head>
+  <body class="bg-gradient-to-br from-gray-50 to-gray-100">
     <!-- Particle Canvas -->
     <canvas id="particleCanvas"></canvas>
-    
+
     <!-- Hero Section -->
     <div class="content-layer min-h-screen flex flex-col">
-        <!-- Header -->
-        <header class="p-4 md:p-6">
-            <div class="max-w-7xl mx-auto flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <img src="logo.jpeg" alt="Logo" class="w-10 h-10 rounded" />
-                    <span class="text-lg md:text-xl font-semibold text-gray-800">Waspito</span>
-                </div>
-                <button class="md:hidden">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
-            </div>
-        </header>
-        
-        <!-- Hero Content -->
-        <main class="flex-1 flex items-center justify-center px-4 py-12 md:py-20">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="flex items-center justify-center space-x-2 mb-6">
-                    <img src="waspito_bot.png" alt="Waspito Bot" class="w-12 h-12 md:w-16 md:h-16 hovering-bot" />
-                </div>
-                
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 md:mb-6">
-                    Healthcare made simple
-                </h1>
-                
-                <p class="text-xl md:text-3xl lg:text-4xl text-gray-600 mb-8 md:mb-12">
-                   with our 24/7 Assistant
-                </p>
-                
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button class="liquid-glass w-full sm:w-auto px-8 py-4 rounded-full font-medium">
-                        <div class="glass-text flex items-center justify-center space-x-2">
-                            <span>Coming Soon</span>
-                        </div>
-                    </button>
-                    
-                    <a href="mailto:waspito@gmail.com" class="liquid-glass w-full sm:w-auto px-8 py-4 rounded-full font-medium">
-                        <div class="glass-text">
-                            Contact Support
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </main>
+      <!-- Header -->
+      <header class="p-4 md:p-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <img src="logo.jpeg" alt="Logo" class="w-10 h-10 rounded" />
+            <span class="text-lg md:text-xl font-semibold text-gray-800"
+              >Waspito</span
+            >
+          </div>
+          <button class="md:hidden">
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Content -->
+      <main class="flex-1 flex items-center justify-center px-4 py-12 md:py-20">
+        <div class="max-w-4xl mx-auto text-center">
+          <!-- Bot is now positioned at particle center via JavaScript -->
+          <div
+            class="flex items-center justify-center space-x-2 mb-6"
+            style="visibility: hidden"
+          >
+            <img
+              src="waspito_bot.png"
+              alt="Waspito Bot"
+              class="w-12 h-12 md:w-16 md:h-16"
+            />
+          </div>
+
+          <!-- Floating bot that follows particle center -->
+          <img
+            src="waspito_bot.png"
+            alt="Waspito Bot"
+            class="w-12 h-12 md:w-16 md:h-16 hovering-bot"
+          />
+
+          <h1
+            class="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4 md:mb-6"
+          >
+            Healthcare made simple
+          </h1>
+
+          <p
+            class="text-xl md:text-3xl lg:text-4xl text-gray-600 mb-8 md:mb-12"
+          >
+            with our 24/7 Assistant
+          </p>
+
+          <div
+            class="flex flex-col sm:flex-row items-center justify-center gap-4"
+          >
+            <button
+              class="liquid-glass w-full sm:w-auto px-8 py-4 rounded-full font-medium"
+            >
+              <div
+                class="glass-text flex items-center justify-center space-x-2"
+              >
+                <span>Coming Soon</span>
+              </div>
+            </button>
+
+            <a
+              href="mailto:waspito@gmail.com"
+              class="liquid-glass w-full sm:w-auto px-8 py-4 rounded-full font-medium"
+            >
+              <div class="glass-text">Contact Support</div>
+            </a>
+          </div>
+        </div>
+      </main>
     </div>
 
     <!-- SVG Filter for Liquid Glass Distortion -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <defs>
-            <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-                <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008" numOctaves="2" seed="92" result="noise" />
-                <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
-                <feDisplacementMap in="SourceGraphic" in2="blurred" scale="77" xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-        </defs>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <defs>
+        <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.008"
+            numOctaves="2"
+            seed="92"
+            result="noise"
+          />
+          <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="blurred"
+            scale="77"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
     </svg>
 
     <script>
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-        
-        const isMobile = window.innerWidth < 768;
-        const particleCount = isMobile ? 30 : 60;
-        
-        class Particle {
-            constructor(index, total, ring, particlesInRing, positionInRing) {
-                // Store ring information
-                this.ring = ring;
-                this.ringSpacing = 35;
-                this.radius = (ring + 1) * this.ringSpacing;
-                this.angleStep = (Math.PI * 2) / particlesInRing;
-                this.angle = positionInRing * this.angleStep;
-                
-                // Initial center position
-                this.centerX = 0;
-                this.centerY = 0;
-                
-                // Calculate initial position
-                this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
-                this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
-                
-                this.x = this.baseX;
-                this.y = this.baseY;
-                this.vx = 0;
-                this.vy = 0;
-                
-                // Size properties
-                this.minSize = 2;
-                this.maxSize = 8;
-                this.size = this.minSize + Math.random() * (this.maxSize - this.minSize);
-                this.sizePhase = Math.random() * Math.PI * 6;
-                this.sizeSpeed = 0.02 + Math.random() * 0.02;
-                
-                // Wave properties
-                this.wavePhase = Math.random() * Math.PI * 2;
-                this.waveSpeed = 0.01 + Math.random() * 0.01;
-                this.waveAmplitudeX = 30 + Math.random() * 50;
-                this.waveAmplitudeY = 30 + Math.random() * 50;
-                
-                // Depth (for parallax and size variation)
-                this.depth = 0.7 + Math.random() * 0.3;
-                
-                // Color - #2FA74B (green)
-                this.hue = 140; // Green hue
-                this.saturation = 80; // Saturation
-                this.lightness = 42 + Math.random() * 8; // Lightness range (42-50%)
-            }
-            
-            update(time) {
-                // Size pulsation
-                this.sizePhase += this.sizeSpeed;
-                const sizeOscillation = Math.sin(this.sizePhase);
-                this.size = this.minSize + ((sizeOscillation + 1) / 2) * (this.maxSize - this.minSize) * this.depth;
-                
-                // Calculate direction from center to mouse
-                const dx = mouseX - this.centerX;
-                const dy = mouseY - this.centerY;
-                const distToMouse = Math.sqrt(dx * dx + dy * dy);
-                
-                // Calculate angle from center to this particle
-                const particleAngleFromCenter = Math.atan2(this.baseY - this.centerY, this.baseX - this.centerX);
-                const mouseAngleFromCenter = Math.atan2(dy, dx);
-                
-                // Calculate angle difference (how aligned particle is with mouse direction)
-                let angleDiff = mouseAngleFromCenter - particleAngleFromCenter;
-                // Normalize to -PI to PI
-                while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-                while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
-                
-                // Particles in front move faster, particles behind move slower
-                // cos(0) = 1 (front), cos(PI) = -1 (back)
-                const alignmentFactor = Math.cos(angleDiff);
-                const followSpeed = 0.05 + (alignmentFactor * 0.03); // 0.02 to 0.08
-                
-                // Update center to follow mouse with varying speed
-                this.centerX += (mouseX - this.centerX) * followSpeed;
-                this.centerY += (mouseY - this.centerY) * followSpeed;
-                
-                // Calculate new base position on ring around mouse
-                this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
-                this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
-                
-                // Wave motion
-                this.wavePhase += this.waveSpeed;
-                const waveX = Math.sin(this.wavePhase) * this.waveAmplitudeX * this.depth * 0.3;
-                const waveY = Math.cos(this.wavePhase * 0.8) * this.waveAmplitudeY * this.depth * 0.3;
-                
-                // Update position with wave motion
-                const targetX = this.baseX + waveX;
-                const targetY = this.baseY + waveY;
-                
-                // Smooth movement to target
-                this.x += (targetX - this.x) * 0.15;
-                this.y += (targetY - this.y) * 0.15;
-                
-                // Calculate velocity for jelly effect
-                this.vx = (targetX - this.x) * 0.5;
-                this.vy = (targetY - this.y) * 0.5;
-            }
-            
-            draw() {
-                // Opacity based on size (smaller = more transparent)
-                const opacity = (this.size - this.minSize) / (this.maxSize - this.minSize) * 0.85;
-                
-                // Subtle jelly-like squash and stretch
-                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                const stretchFactor = Math.min(speed * 0.05, 0.3); // Limit stretch
-                const radiusX = this.size * (1 + stretchFactor);
-                const radiusY = this.size * (1 - stretchFactor * 0.5);
-                
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                
-                // Rotate based on velocity direction only if moving
-                if (speed > 0.1) {
-                    const angle = Math.atan2(this.vy, this.vx);
-                    ctx.rotate(angle);
-                }
-                
-                // Draw particle with sharper gradient - less blur
-                const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radiusX);
-                gradient.addColorStop(0, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 10}%, ${opacity})`);
-                gradient.addColorStop(0.7, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 5}%, ${opacity * 0.6})`);
-                gradient.addColorStop(1, `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0)`);
-                
-                ctx.beginPath();
-                ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                ctx.restore();
-            }
-        }
-        
-        // Create particles in concentric rings
-        const particles = [];
-        const numRings = isMobile ? 3 : 6;
-        const particlesPerRing = isMobile ? 8 : 20;
-        
-        for (let ring = 0; ring < numRings; ring++) {
-            for (let i = 0; i < particlesPerRing; i++) {
-                particles.push(new Particle(particles.length, particlesPerRing * numRings, ring, particlesPerRing, i));
-            }
-        }
-        
-        // Mouse/Touch tracking
-        if (!isMobile) {
-            document.addEventListener('mousemove', (e) => {
-                targetX = e.clientX;
-                targetY = e.clientY;
-            });
-        } else {
-            document.addEventListener('touchstart', (e) => {
-                const touch = e.touches[0];
-                targetX = touch.clientX;
-                targetY = touch.clientY;
-            });
-            
-            document.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                const touch = e.touches[0];
-                targetX = touch.clientX;
-                targetY = touch.clientY;
-            }, { passive: false });
-        }
-        
-        // Animation loop
-        let time = 0;
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            time += 0.016;
-            
-            // Smooth mouse position
-            mouseX += (targetX - mouseX) * 0.1;
-            mouseY += (targetY - mouseY) * 0.1;
-            
-            // Update and draw particles
-            particles.forEach(particle => {
-                particle.update(time);
-                particle.draw();
-            });
-            
+      const canvas = document.getElementById("particleCanvas");
+      const ctx = canvas.getContext("2d");
 
-            
-            requestAnimationFrame(animate);
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      let mouseX = width / 2;
+      let mouseY = height / 2;
+      let targetX = width / 2;
+      let targetY = height / 2;
+
+      const isMobile = window.innerWidth < 768;
+      const particleCount = isMobile ? 30 : 60;
+
+      class Particle {
+        constructor(index, total, ring, particlesInRing, positionInRing) {
+          // Store ring information
+          this.ring = ring;
+          this.ringSpacing = 35;
+          this.radius = (ring + 1) * this.ringSpacing;
+          this.angleStep = (Math.PI * 2) / particlesInRing;
+          this.angle = positionInRing * this.angleStep;
+
+          // Initial center position
+          this.centerX = 0;
+          this.centerY = 0;
+
+          // Calculate initial position
+          this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
+          this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
+
+          this.x = this.baseX;
+          this.y = this.baseY;
+          this.vx = 0;
+          this.vy = 0;
+
+          // Size properties
+          this.minSize = 2;
+          this.maxSize = 8;
+          this.size =
+            this.minSize + Math.random() * (this.maxSize - this.minSize);
+          this.sizePhase = Math.random() * Math.PI * 6;
+          this.sizeSpeed = 0.02 + Math.random() * 0.02;
+
+          // Wave properties
+          this.wavePhase = Math.random() * Math.PI * 2;
+          this.waveSpeed = 0.01 + Math.random() * 0.01;
+          this.waveAmplitudeX = 30 + Math.random() * 50;
+          this.waveAmplitudeY = 30 + Math.random() * 50;
+
+          // Depth (for parallax and size variation)
+          this.depth = 0.7 + Math.random() * 0.3;
+
+          // Color - #2FA74B (green)
+          this.hue = 140; // Green hue
+          this.saturation = 80; // Saturation
+          this.lightness = 42 + Math.random() * 8; // Lightness range (42-50%)
         }
-        
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+
+        update(time) {
+          // Size pulsation
+          this.sizePhase += this.sizeSpeed;
+          const sizeOscillation = Math.sin(this.sizePhase);
+          this.size =
+            this.minSize +
+            ((sizeOscillation + 1) / 2) *
+              (this.maxSize - this.minSize) *
+              this.depth;
+
+          // Calculate direction from center to mouse
+          const dx = mouseX - this.centerX;
+          const dy = mouseY - this.centerY;
+          const distToMouse = Math.sqrt(dx * dx + dy * dy);
+
+          // Calculate angle from center to this particle
+          const particleAngleFromCenter = Math.atan2(
+            this.baseY - this.centerY,
+            this.baseX - this.centerX
+          );
+          const mouseAngleFromCenter = Math.atan2(dy, dx);
+
+          // Calculate angle difference (how aligned particle is with mouse direction)
+          let angleDiff = mouseAngleFromCenter - particleAngleFromCenter;
+          // Normalize to -PI to PI
+          while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
+          while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
+
+          // Particles in front move faster, particles behind move slower
+          // cos(0) = 1 (front), cos(PI) = -1 (back)
+          const alignmentFactor = Math.cos(angleDiff);
+          const followSpeed = 0.05 + alignmentFactor * 0.03; // 0.02 to 0.08
+
+          // Update center to follow mouse with varying speed
+          this.centerX += (mouseX - this.centerX) * followSpeed;
+          this.centerY += (mouseY - this.centerY) * followSpeed;
+
+          // Calculate new base position on ring around mouse
+          this.baseX = this.centerX + Math.cos(this.angle) * this.radius;
+          this.baseY = this.centerY + Math.sin(this.angle) * this.radius;
+
+          // Wave motion
+          this.wavePhase += this.waveSpeed;
+          const waveX =
+            Math.sin(this.wavePhase) * this.waveAmplitudeX * this.depth * 0.3;
+          const waveY =
+            Math.cos(this.wavePhase * 0.8) *
+            this.waveAmplitudeY *
+            this.depth *
+            0.3;
+
+          // Update position with wave motion
+          const targetX = this.baseX + waveX;
+          const targetY = this.baseY + waveY;
+
+          // Smooth movement to target
+          this.x += (targetX - this.x) * 0.15;
+          this.y += (targetY - this.y) * 0.15;
+
+          // Calculate velocity for jelly effect
+          this.vx = (targetX - this.x) * 0.5;
+          this.vy = (targetY - this.y) * 0.5;
+        }
+
+        draw() {
+          // Opacity based on size (smaller = more transparent)
+          const opacity =
+            ((this.size - this.minSize) / (this.maxSize - this.minSize)) * 0.85;
+
+          // Subtle jelly-like squash and stretch
+          const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+          const stretchFactor = Math.min(speed * 0.05, 0.3); // Limit stretch
+          const radiusX = this.size * (1 + stretchFactor);
+          const radiusY = this.size * (1 - stretchFactor * 0.5);
+
+          ctx.save();
+          ctx.translate(this.x, this.y);
+
+          // Rotate based on velocity direction only if moving
+          if (speed > 0.1) {
+            const angle = Math.atan2(this.vy, this.vx);
+            ctx.rotate(angle);
+          }
+
+          // Draw particle with sharper gradient - less blur
+          const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radiusX);
+          gradient.addColorStop(
+            0,
+            `hsla(${this.hue}, ${this.saturation}%, ${
+              this.lightness + 10
+            }%, ${opacity})`
+          );
+          gradient.addColorStop(
+            0.7,
+            `hsla(${this.hue}, ${this.saturation}%, ${this.lightness + 5}%, ${
+              opacity * 0.6
+            })`
+          );
+          gradient.addColorStop(
+            1,
+            `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0)`
+          );
+
+          ctx.beginPath();
+          ctx.ellipse(0, 0, radiusX, radiusY, 0, 0, Math.PI * 2);
+          ctx.fillStyle = gradient;
+          ctx.fill();
+
+          ctx.restore();
+        }
+      }
+
+      // Create particles in concentric rings
+      const particles = [];
+      const numRings = isMobile ? 3 : 6;
+      const particlesPerRing = isMobile ? 8 : 20;
+
+      for (let ring = 0; ring < numRings; ring++) {
+        for (let i = 0; i < particlesPerRing; i++) {
+          particles.push(
+            new Particle(
+              particles.length,
+              particlesPerRing * numRings,
+              ring,
+              particlesPerRing,
+              i
+            )
+          );
+        }
+      }
+
+      // Mouse/Touch tracking
+      if (!isMobile) {
+        document.addEventListener("mousemove", (e) => {
+          targetX = e.clientX;
+          targetY = e.clientY;
         });
-        
-        // Start animation
-        animate();
+      } else {
+        document.addEventListener("touchstart", (e) => {
+          const touch = e.touches[0];
+          targetX = touch.clientX;
+          targetY = touch.clientY;
+        });
+
+        document.addEventListener(
+          "touchmove",
+          (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            targetX = touch.clientX;
+            targetY = touch.clientY;
+          },
+          { passive: false }
+        );
+      }
+
+      // Get bot element
+      const botElement = document.querySelector(".hovering-bot");
+
+      // Track particle center position (same as mouse position after smoothing)
+      let particleCenterX = width / 2;
+      let particleCenterY = height / 2;
+
+      // Initialize bot at center of viewport
+      if (botElement) {
+        botElement.style.left = `${width / 2}px`;
+        botElement.style.top = `${height / 2}px`;
+        botElement.style.transform = "translate(-50%, -50%)";
+      }
+
+      // Animation loop
+      let time = 0;
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        time += 0.016;
+
+        // Smooth mouse position (same as particles use)
+        mouseX += (targetX - mouseX) * 0.1;
+        mouseY += (targetY - mouseY) * 0.1;
+
+        // Update particle center to match mouse position (particles follow this)
+        particleCenterX = mouseX;
+        particleCenterY = mouseY;
+
+        // Update and draw particles
+        particles.forEach((particle) => {
+          particle.update(time);
+          particle.draw();
+        });
+
+        // Update bot position to be exactly at particle center
+        if (botElement) {
+          // Position bot directly at particle center coordinates
+          // Using translate(-50%, -50%) to center the bot on the point
+          const floatY = Math.sin(time * 2) * 5;
+
+          botElement.style.left = `${particleCenterX}px`;
+          botElement.style.top = `${particleCenterY + floatY}px`;
+          botElement.style.transform = "translate(-50%, -50%)";
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        // Update bot position if it exists
+        if (botElement) {
+          botElement.style.left = `${particleCenterX}px`;
+          botElement.style.top = `${particleCenterY}px`;
+        }
+      });
+
+      // Start animation
+      animate();
     </script>
-</body>
+  </body>
 </html>
